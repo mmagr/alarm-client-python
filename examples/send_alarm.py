@@ -1,9 +1,9 @@
 import argparse
 import sys
 import logging
-from alarmmanager.connection import RabbitMqClientConnection
-from alarmmanager.alarm import Alarm, AlarmSeverity
-from alarmmanager.connection import LOGGER as CLIENT_LOGGER
+from alarmlibrary.connection import RabbitMqClientConnection
+from alarmlibrary.alarm import Alarm, AlarmSeverity
+from alarmlibrary.connection import LOGGER as CLIENT_LOGGER
 
 __author__ = "Manuel Gavidia"
 __copyright__ = "Manuel Gavidia"
@@ -32,7 +32,7 @@ def main():
     client.open(args.host)
 
     alarm = Alarm(  domain="AuthenticationError", namespace="dojot.auth",
-                    severity=AlarmSeverity.MINOR, timestamp=1, 
+                    severity=AlarmSeverity.MINOR, timestamp=1,
                     description="description to be written")
     alarm.add_primary_subject("instance_id", "4")
     alarm.add_primary_subject("module_name", "My beautiful module")

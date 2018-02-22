@@ -58,7 +58,7 @@ class Alarm(object):
 
     @namespace.setter
     def namespace(self, value):
-    	self._namespace = value
+        self._namespace = value
 
     @description.setter
     def description(self, value):
