@@ -20,7 +20,7 @@ def parse_args(args):
         description="DOJOT Alarm publish example")
     parser.add_argument(
         dest="host",
-        help="Alarm manager host",
+        help="RabbitMQ host",
         type=str)
     return parser.parse_args(args)
 

@@ -1,8 +1,8 @@
 import logging
 import pika
 import json
-from alarm import Alarm
-from exceptions import ConnectionClosed, InvalidAlarm, AuthenticationError, AlarmManagerException
+from alarmlibrary.alarm import Alarm
+from alarmlibrary.exceptions import ConnectionClosed, InvalidAlarm, AuthenticationError, AlarmManagerException
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ DEFAULT = {
 
 class RabbitMqClientConnection(object):
     def __init__(self, exchange=DEFAULT['EXCHANGE'], exchange_type=DEFAULT['EXCHANGE_TYPE'],
-                default_routing_key=DEFAULT['ROUTING_KEY']):
+                 default_routing_key=DEFAULT['ROUTING_KEY']):
         self._exchange = exchange
         self._exchange_type = exchange_type
         self._default_routing_key = default_routing_key
@@ -36,8 +36,9 @@ class RabbitMqClientConnection(object):
             parameters = pika.ConnectionParameters(host, port, '/', credentials)
             self._connection = pika.BlockingConnection(parameters)
             self._channel = self._connection.channel()
-            self._channel.exchange_declare(exchange=self._exchange, exchange_type=self._exchange_type,
-            durable=True)
+            self._channel.exchange_declare(exchange=self._exchange,
+                                           exchange_type=self._exchange_type,
+                                           durable=True)
         except pika.exceptions.ProbableAuthenticationError:
             raise AuthenticationError("Invalid credentials: user=%s passwd=%s" % (user, password))
         except pika.exceptions.ConnectionClosed:

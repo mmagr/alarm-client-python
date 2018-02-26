@@ -1,4 +1,5 @@
 import json
+import time
 from collections import OrderedDict
 from enum import Enum
 
@@ -10,10 +11,9 @@ class AlarmSeverity(Enum):
     CRITICAL = 3
     CLEAR = 4
 
-
 class Alarm(object):
 
-    def __init__(self, domain, severity, timestamp, namespace="", description=""):
+    def __init__(self, domain, namespace, severity, timestamp=long(time.time()), description=""):
         if not isinstance(severity, AlarmSeverity):
             raise ValueError('Invalid severity value, it must be AlarmSeverity')
 
@@ -22,19 +22,8 @@ class Alarm(object):
         self._timestamp = long(timestamp)
         self._namespace = namespace
         self._description = description
-
         self._primary_subject = dict()
         self._additional_data = dict()
-
-        severity_to_string = {
-            AlarmSeverity.WARNING: 'Warning',
-            AlarmSeverity.MINOR: 'Minor',
-            AlarmSeverity.MAJOR: 'Major',
-            AlarmSeverity.CRITICAL: 'Critical',
-            AlarmSeverity.CLEAR: 'Clear'
-        }
-
-        self._str_severity = severity_to_string[severity]
 
     @property
     def domain(self):
@@ -106,7 +95,7 @@ class Alarm(object):
         data['domain'] = self._domain
         data['primarySubject'] = self._primary_subject
         data['additionalData'] = self._additional_data
-        data['severity'] = self._str_severity
+        data['severity'] = self._severity.name.title() # Convert MINOR -> Minor
         data['eventTimestamp'] = self._timestamp
 
         return json.dumps(data)
